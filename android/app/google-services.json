@@ -1,0 +1,109 @@
+{
+  "project_info": {
+    "project_number": "443633037277",
+    "firebase_url": "https://startupsandfunds-default-rtdb.firebaseio.com",
+    "project_id": "startupsandfunds",
+    "storage_bucket": "startupsandfunds.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443633037277:android:13ad272357c2c70ef3d034",
+        "android_client_info": {
+          "package_name": "com.bos.startupandfunds.startupandfunds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443633037277-ibf9k511eheapb6gn5mljq3octlfjcp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIPN-bbxzFQSUUjNaT_BQcHNU0tum1d98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443633037277-ibf9k511eheapb6gn5mljq3octlfjcp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443633037277:android:ae1498d4e8233598f3d034",
+        "android_client_info": {
+          "package_name": "com.bou.Startups_Funds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443633037277-5v1st2v6771s5s3gp1io7rtqr8duhu5c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bou.Startups_Funds",
+            "certificate_hash": "27642c620ab2ad1d6a23659c21759a11206d2f4b"
+          }
+        },
+        {
+          "client_id": "443633037277-h6fpgbthtga3tb8plir25jhrvtbq1co1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bou.Startups_Funds",
+            "certificate_hash": "715e1e79731ed5a6c21e2cc7fc1b5e07854c2f18"
+          }
+        },
+        {
+          "client_id": "443633037277-kf1uei9cl3hhjvohuqvhdvis2t3rteph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bou.Startups_Funds",
+            "certificate_hash": "6db5c0f22b3f32c235fbeeedc03173e91139eb06"
+          }
+        },
+        {
+          "client_id": "443633037277-oi6bs9ub9oa7cjqm2s0a88pbhuc5ookd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bou.Startups_Funds",
+            "certificate_hash": "f9677ec0e363c8e45aac57730e6b6507b6b17342"
+          }
+        },
+        {
+          "client_id": "443633037277-plu0jf2hqd2f08bhpg3lukpo0ict1e8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bou.Startups_Funds",
+            "certificate_hash": "45e1cb26908e66cb4eb42bcce2e53adfa683e4e3"
+          }
+        },
+        {
+          "client_id": "443633037277-ibf9k511eheapb6gn5mljq3octlfjcp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIPN-bbxzFQSUUjNaT_BQcHNU0tum1d98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443633037277-ibf9k511eheapb6gn5mljq3octlfjcp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
