@@ -7,6 +7,7 @@ import 'package:startupandfunds/dashboard/DashboardScreen.dart';
 import 'package:startupandfunds/fonts/ApplicationFonts.dart';
 import 'package:startupandfunds/styleDrawable/styleDrawable.dart';
 import 'package:startupandfunds/utilities/GradientText.dart';
+
 class InPutUserInfo extends StatefulWidget {
   @override
   _InPutUserInfoState createState() => _InPutUserInfoState();
@@ -36,8 +37,17 @@ class _InPutUserInfoState extends State<InPutUserInfo> {
 
   String? website;
   String? companyName;
+  GlobalKey? formKey ;
+
+  @override
+  void initState() {
+   formKey = GlobalKey<FormState>();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    getAdminDetails();
+    getCurrentUser();
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -48,54 +58,74 @@ class _InPutUserInfoState extends State<InPutUserInfo> {
             decoration: getSplashDecoration(),
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GradientText(
-                    "Welcome ${userName}!",
-                    style: getRobotoRegular().get20(),
-                    gradient: getMainGradiant(),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  GradientText(
-                    "To provide tailored information we need,",
-                    style: getRobotoRegular().get20(),
-                    gradient: getMainGradiant(),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: getMainBackground().getRounded10(),
-                    child: Container(
-                      decoration: getWeight().getRounded10(),
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      child: createInPutForm(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DashboardScreen()));
-                          },
-                          child: Text(
-                            "Skip",
-                            style: getRobotoRegular().get12().getPrimary(),
+                  Center(
+                    child:SizedBox(
+                      width: 400,
+                      child: Column(
+                        children: [
+                          Text(
+                            "Welcome ${userName}!",
+                            style: getRobotoRegular().get20(),
                           ),
-                        )
-                      ])
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "To provide tailored information we need,",
+                            style: getRobotoRegular().get20(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child:SizedBox(
+                                  width: 400,
+                                  child:     Container(
+                                    decoration: getMainBackground().getRounded10(),
+                                    child: Container(
+                                      decoration: getWeight().getRounded10(),
+                                      margin: EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(10),
+                                      child: createInPutForm(),
+                                    ),
+                                  ),
+                                )
+                                ,
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DashboardScreen()));
+                                  },
+                                  child: Text(
+                                    "Skip",
+                                    style: getRobotoRegular().get12().getPrimary(),
+                                  ),
+                                )
+                              ])
+                        ],
+                      ),
+                    )
+                    ,
+                  )
                 ],
               ),
             ),
@@ -106,133 +136,149 @@ class _InPutUserInfoState extends State<InPutUserInfo> {
   }
 
   Widget createInPutForm() {
-    getAdminDetails();
-    getCurrentUser();
-    var formKey = GlobalKey<FormState>();
-    return Form(
-        key: formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Company name:",
-              style: getRobotoRegular().get12(),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: getInputDecoration(),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter company name';
-                }
-                companyName = value;
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Do you have a website?",
-                    style: getRobotoRegular().get12(),
-                  ),
-                ),
-                RadioGroup.builder(
-                  direction: Axis.horizontal,
-                  groupValue: _verticalGroupValue,
-                  onChanged: (value) => setState(() {
-                    _verticalGroupValue = value;
-                  }),
-                  items: _status,
-                  itemBuilder: (item) => RadioButtonBuilder(item!,
-                      textPosition: RadioButtonTextPosition.right),
-                ),
-              ],
-            ),
-            Visibility(
-              visible: _verticalGroupValue == "Yes",
-              child: TextFormField(
+
+
+    return SizedBox(
+      width: 400,
+      child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Company name:",
+                style: getRobotoRegular().get12(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
                 decoration: getInputDecoration(),
                 validator: (value) {
-                  if (_verticalGroupValue == "Yes") {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter website';
-                    }
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
                   }
-                  website = value;
+                  companyName= value;
                   return null;
                 },
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Sector:",
-              style: getRobotoRegular().get12(),
-            ),
-            DropdownButton(
-              isExpanded: true,
-              style: getRobotoRegular().get12(),
-              items: sector_list
-                  .map((e) => DropdownMenuItem(
-                        child: Text(e, style: getRobotoRegular().get12()),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  print(value.toString() + "01");
-                  selectedSector = value.toString();
-                });
-              },
-              value: selectedSector,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "What are you interested about?(So we can provide you with latest updates).",
-              style: getRobotoRegular().get12(),
-            ),
-            DropdownButton<String>(
-              style: getRobotoRegular().get12(),
-              isExpanded: true,
-              items: intrustList
-                  .map((e) => DropdownMenuItem(
-                        child: Text(e, style: getRobotoRegular().get12()),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  print(value.toString() + "02");
-                  selectedIntrust = value!;
-                });
-              },
-              value: selectedIntrust,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            MaterialButton(
-                onPressed: () => {
-                      if (formKey.currentState!.validate())
-                        {
-                          updateAdminDetails(),
-                        }
-                    })
-          ],
-        ));
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Do you have a website?",
+                      style: getRobotoRegular().get12(),
+                    ),
+                  ),
+                  RadioGroup.builder(
+                    direction: Axis.horizontal,
+                    groupValue: _verticalGroupValue,
+                    onChanged: (value) => setState(() {
+                      _verticalGroupValue = value;
+                    }),
+                    items: _status,
+                    itemBuilder: (item) => RadioButtonBuilder(item!,
+                        textPosition: RadioButtonTextPosition.right),
+                  ),
+                ],
+              ),
+              Visibility(
+                visible: _verticalGroupValue == "Yes",
+                child: TextFormField(
+                  decoration: getInputDecoration(),
+                  validator: (value) {
+                    if (_verticalGroupValue == "Yes") {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter website';
+                      }
+                    }
+                    website = value;
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Sector:",
+                style: getRobotoRegular().get12(),
+              ),
+              DropdownButton(
+                isExpanded: true,
+                style: getRobotoRegular().get12(),
+                items: sector_list
+                    .map((e) => DropdownMenuItem(
+                  child: Text(e, style: getRobotoRegular().get12()),
+                  value: e,
+                ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    print(value.toString() + "01");
+                    selectedSector = value.toString();
+                  });
+                },
+                value: selectedSector,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "What are you interested about?(So we can provide you with latest updates).",
+                style: getRobotoRegular().get12(),
+              ),
+              DropdownButton<String>(
+                style: getRobotoRegular().get12(),
+                isExpanded: true,
+                items: intrustList
+                    .map((e) => DropdownMenuItem(
+                  child: Text(e, style: getRobotoRegular().get12()),
+                  value: e,
+                ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    print(value.toString() + "02");
+                    selectedIntrust = value!;
+                  });
+                },
+                value: selectedIntrust,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      updateAdminDetails();
+                    },
+                    child: Container(
+                      decoration: getMainBackground().getRounded10(),
+                      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                      child: Center(
+                        child: Text(
+                          "Submit",
+                          style: getRobotoRegular().get12().getWeight(),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                ],
+              )
+            ],
+          )),
+    );
   }
 
   Future getAdminDetails() async {

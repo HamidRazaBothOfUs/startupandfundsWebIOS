@@ -193,3 +193,39 @@ extension MapListOrderBy on List<Map<String,dynamic>>{
     return list;
   }
 }
+
+extension getCountriesList on List<String>{
+  List<String> getInOrder(){
+    List<String> list=this;
+    list.sort((a,b){
+      return a.compareTo(b);
+    });
+    return list;
+  }
+  List<String> removeDublicateString(){
+    List<String> list=this;
+    List<String> newList=[];
+    newList.add("All");
+    for(var item in list){
+      if(!newList.contains(item)){
+        newList.add(item);
+      }
+    }
+    return newList;
+  }
+
+
+}
+
+extension getRegionsList on Map<String,dynamic>{
+  List<String> getValueForKey(){
+    List<String> list=[];
+    this.forEach((key, value) {
+      if(key=="key"){
+        list.add(value);
+      }
+    });
+    return list;
+  }
+
+}

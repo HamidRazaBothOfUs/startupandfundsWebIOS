@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:startupandfunds/fonts/ApplicationFonts.dart';
 import 'package:startupandfunds/utilities/ContactDetailsWithImage.dart';
@@ -26,9 +27,9 @@ class _DetailsPage extends State<StatefulWidget> {
   DocumentSnapshot snapshot;
   String oderBy,collectionName;
   _DetailsPage(this.snapshot,this.oderBy,this.collectionName);
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: SafeArea(child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,4 +110,6 @@ class _DetailsPage extends State<StatefulWidget> {
         ),)
     );
   }
+
+
 }

@@ -14,6 +14,8 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:startupandfunds/dashboard/DashboardScreen.dart';
 import 'package:startupandfunds/fonts/ApplicationFonts.dart';
 import 'package:startupandfunds/utilities/GradientText.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../AdsSetUp/CheckPlatForm.dart';
 import '../AllStrings/LocalStrings.dart';
 import '../styleDrawable/styleDrawable.dart';
 import '../userInfoPage/InputUserPage.dart';
@@ -26,13 +28,7 @@ class Authentication extends StatefulWidget{
 
 class _Authentication extends State<Authentication> {
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: "443633037277-ibf9k511eheapb6gn5mljq3octlfjcp2.apps.googleusercontent.com",
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  GoogleSignIn _googleSignIn = GoogleSignIn();
   bool checkStatus=true;
   @override
   Widget build(BuildContext context) {
@@ -86,7 +82,7 @@ class _Authentication extends State<Authentication> {
                             ),
 
                           ),
-                          Container(
+                          CheckPlatForm.checkForIOS ? Container(
                             margin: EdgeInsets.all(30),
                             decoration: getGmailButtonStrock(),
                             child: Material(
@@ -106,7 +102,7 @@ class _Authentication extends State<Authentication> {
                               ),
                             ),
 
-                          ),
+                          ):Container(),
                           Padding(padding: EdgeInsets.all(30),child: Row(
                             children: [
                               Checkbox(value: checkStatus, onChanged: (bool){
@@ -114,8 +110,13 @@ class _Authentication extends State<Authentication> {
                                   checkStatus = bool!;
                                 });
                               },),
-                              Expanded(child: Text(checkTerms(),style: getRobotoRegular().get12(),)),
-                              Text("Terms & Conditions.",style: getRobotoRegular().get12().getLink(),)
+                              Text(checkTerms(),style: getRobotoRegular().get12(),),
+                              InkWell(
+                                onTap: (){
+                                  _launchInWebViewOrVC("https://bothofus.se/privacy-policy/");
+                                },
+                                child: Text("Terms & Conditions.",style: getRobotoRegular().getLink().get12(),),
+                              )
                             ],
                           )),
                         ],
@@ -128,6 +129,15 @@ class _Authentication extends State<Authentication> {
       ),
     );
   }
+
+  Future<void> _launchInWebViewOrVC(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> _handleSignIn() async {
     try {
       print("0005");
@@ -157,10 +167,6 @@ class _Authentication extends State<Authentication> {
     // Create a new provider
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
-    googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-    googleProvider.setCustomParameters({
-      'login_hint': 'user@example.com'
-    });
 
     // Once signed in, return the UserCredential
     var googleAuth= await FirebaseAuth.instance.signInWithPopup(googleProvider);
@@ -210,5 +216,14 @@ class _Authentication extends State<Authentication> {
 
 
   Future<void> _handleApple() async {
+    EasyLoading.showToast("Apple Sign In is not available for now");
+    return;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final appleProvider = AppleAuthProvider();
+    if (kIsWeb) {
+     var webLogin= await _auth.signInWithPopup(appleProvider);
+    } else {
+     var appleIOS= await _auth.signInWithAuthProvider(appleProvider);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../fonts/ApplicationFonts.dart';
@@ -16,18 +17,26 @@ class ContactDetailsWithImage extends StatefulWidget {
 
 class _ContactDetailsWithImage extends State<StatefulWidget> {
   _ContactDetailsWithImage(this.type, this.value);
-
+  RewardedAd? _rewardedAd=null;
   String type;
   String? value;
 
   @override
   Widget build(BuildContext context) {
+    loadAds();
     return Column(
       children: [
         if (value != null && type=="email")ListTile(leading: Icon(Icons.email),title: Text(value!,style: getRobotoRegular().get12(),),onTap: (){
-          setState(() {
-            _launchInWebViewOrVC("mailto:" + value!);
-          });
+          if(_rewardedAd!=null){
+            _rewardedAd!.show(onUserEarnedReward:  (AdWithoutView ad, RewardItem rewardItem){
+              _launchInWebViewOrVC("mailto:" + value!);
+            });
+          }
+          else{
+            setState(() {
+              _launchInWebViewOrVC("mailto:" + value!);
+            });
+          }
         },),
         if (value != null && (type=="webAddress" || type=="website"))ListTile(leading: Icon(Icons.link),title: Text(value!,style: getRobotoRegular().get12(),),onTap: (){
           _launchInWebViewOrVC(value!);
@@ -62,5 +71,20 @@ class _ContactDetailsWithImage extends State<StatefulWidget> {
       throw 'Could not launch $url';
     }
   }
-
+  loadAds(){
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-7394253111529621/2313862407',
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (RewardedAd ad) {
+          print('$ad loaded.');
+          // Keep a reference to the ad so you can show it later.
+          this._rewardedAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('RewardedAd failed to load: $error');
+        },
+      ),
+    );
+  }
 }

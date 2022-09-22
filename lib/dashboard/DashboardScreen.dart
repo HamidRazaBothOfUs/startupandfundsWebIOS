@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:startupandfunds/FullList/FullListFunds.dart';
 import 'package:startupandfunds/fonts/ApplicationFonts.dart';
+import 'package:startupandfunds/utilities/Extentions.dart';
 
 import '../AllStrings/LocalStrings.dart';
 import '../detailsPage/DetailsPage.dart';
@@ -24,9 +25,14 @@ class _DashboardScreen extends State<StatefulWidget>{
   String userName="Hamid Raza";
   String? userImage=null;
 
+  List<String> _countryNamesList = ["Pakistan", "Sweden"];
+  List<String> _regionNamesList = ["Asia", "Africa","Europe","North America","South America","Australia","Antarctica"];
+
+
   @override
   Widget build(BuildContext context) {
     getCurrentUser();
+    getAdminDetails();
      return Scaffold(
        body: SafeArea(child: SizedBox(
          height: double.maxFinite,
@@ -213,7 +219,7 @@ class _DashboardScreen extends State<StatefulWidget>{
 
 
 
-   DialogCustom() {
+  DialogCustom() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -223,6 +229,7 @@ class _DashboardScreen extends State<StatefulWidget>{
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
               height: 500,
+              width: 500,
               decoration: getSplashDecoration().getRounded30(),
               padding: EdgeInsets.all(20),
               child: Column(
@@ -241,19 +248,67 @@ class _DashboardScreen extends State<StatefulWidget>{
                       )
                     ],
                   ),
+                  SizedBox(height: 20,),
                   DefaultTabController(length: 2, child: Column(
                     children: [
                       TabBar(
-                        indicator: BoxDecoration(
-                          color:getTangerine(),
-                          shape: BoxShape.values[0],
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        ),
                         tabs: [
                           Tab(child: Text("Country",style: getRobotoRegular().get15(),),),
                           Tab(child: Text("Regions",style: getRobotoRegular().get15(),),),
                         ],
 
+                      ),
+                      SizedBox(
+                        height: 300,
+                        width: double.maxFinite,
+                        child: TabBarView(
+                          children: [
+                            ListView.builder(
+                                itemCount: _countryNamesList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedCountry=_countryNamesList[index];
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children:[
+                                            Text(_countryNamesList[index],style: getRobotoRegular().get15(),),
+                                          ]
+                                      ),
+                                    ),
+                                  );
+                                }),
+                            ListView.builder(
+                                itemCount: _regionNamesList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedCountry=_regionNamesList[index];
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(_regionNamesList[index],style: getRobotoRegular().get15(),),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                })
+                          ],
+                        ),
                       )
                     ],
                   )),
@@ -262,6 +317,26 @@ class _DashboardScreen extends State<StatefulWidget>{
             ),
           );
         });
+  }
+
+
+  Future getAdminDetails() async {
+    FirebaseFirestore.instance
+        .collection("adminControl")
+        .doc("countryFilter")
+        .get()
+        .then((value) => {
+      setState(() {
+        _countryNamesList = List.from(value.data()!["allCountries"]);
+        _countryNamesList = _countryNamesList.getInOrder().removeDublicateString();
+
+
+      })
+    })
+        .catchError((onError) => {
+      print(onError),
+      print("crashFound")
+    });
   }
 
 
@@ -339,4 +414,9 @@ class _UpdatesInvestor extends State<UpdatesInvestor>{
         )
     );
   }
+
+
+
+
+
 }

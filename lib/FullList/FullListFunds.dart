@@ -28,6 +28,9 @@ class _FullListFundScreen extends State<StatefulWidget> with WidgetsBindingObser
   String collectionName, orderBy, title;
   String selectedSubCate = "All";
   _FullListFundScreen(this.collectionName, this.orderBy, this.title);
+  List<String> _countryNamesList = ["Pakistan", "Sweden"];
+  List<String> _regionNamesList = ["Asia", "Africa","Europe","North America","South America","Australia","Antarctica"];
+  String _selectedCountry="All";
 
   Key _refreshKey = UniqueKey();
 
@@ -36,6 +39,7 @@ class _FullListFundScreen extends State<StatefulWidget> with WidgetsBindingObser
   });
   @override
   Widget build(BuildContext context) {
+    getAdminDetails();
     return Scaffold(
         body: SafeArea(child: SizedBox(
             height: double.maxFinite,
@@ -74,7 +78,40 @@ class _FullListFundScreen extends State<StatefulWidget> with WidgetsBindingObser
                             ],
                           )),
                         ),
-                        getAllCategories(collectionName,orderBy),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          decoration:getListItemBack(),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0),child: Text("Currently showing for ",style: getRobotoRegular().get15(),),),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: (){
+                                        print("Clicked");
+                                        DialogCustom();
+                                      },
+                                      child:  Container(
+                                        decoration: getCountryButtonStrock(),
+                                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                          child: Text("${_selectedCountry}",style: getRobotoRegular().get20(),),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              getAllCategories(collectionName,orderBy),
+                              Divider(height: 1,color: getWhiteColor(),)
+                            ],
+                          ),
+                        ),
                         Expanded(
                           child: Scrollbar(
                             key: _refreshKey,
@@ -219,6 +256,129 @@ class _FullListFundScreen extends State<StatefulWidget> with WidgetsBindingObser
       ),
     );
   }
+
+
+
+  DialogCustom() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+              height: 500,
+              width: 500,
+              decoration: getSplashDecoration().getRounded30(),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: Text("Choose from country or region",style: getRobotoRegular().get20(),),),
+                      InkWell(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.close),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  DefaultTabController(length: 2, child: Column(
+                    children: [
+                      TabBar(
+                        tabs: [
+                          Tab(child: Text("Country",style: getRobotoRegular().get15(),),),
+                          Tab(child: Text("Regions",style: getRobotoRegular().get15(),),),
+                        ],
+
+                      ),
+                      SizedBox(
+                        height: 300,
+                        width: double.maxFinite,
+                        child: TabBarView(
+                          children: [
+                            ListView.builder(
+                                itemCount: _countryNamesList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedCountry=_countryNamesList[index];
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children:[
+                                          Text(_countryNamesList[index],style: getRobotoRegular().get15(),),
+                                        ]
+                                      ),
+                                    ),
+                                  );
+                                }),
+                            ListView.builder(
+                                itemCount: _regionNamesList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedCountry=_regionNamesList[index];
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(_regionNamesList[index],style: getRobotoRegular().get15(),),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                })
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+
+  Future getAdminDetails() async {
+    FirebaseFirestore.instance
+        .collection("adminControl")
+        .doc("countryFilter")
+        .get()
+        .then((value) => {
+      setState(() {
+        _countryNamesList = List.from(value.data()!["allCountries"]);
+        _countryNamesList = _countryNamesList.getInOrder().removeDublicateString();
+
+
+      })
+    })
+        .catchError((onError) => {
+          print(onError),
+          print("crashFound")
+    });
+  }
+
 }
 
 
